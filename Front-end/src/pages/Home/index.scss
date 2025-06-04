@@ -1,0 +1,150 @@
+.section__one {
+  width: 100%;
+  height: 85vh;
+
+  .slide {
+    width: 100%;
+    height: 85vh;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .slide__content {
+      text-align: center;
+      color: white;
+      padding: 2rem;
+      border-radius: 10px;
+      max-width: 800px;
+      position: absolute;
+      bottom: 5rem; 
+      left: 4rem;   
+
+      p {
+        font-size: 24px;
+        font-weight: 300;
+        margin-bottom: 0.5rem;
+      }
+
+      h1 {
+        font-size: 48px;
+        margin-bottom: 1rem;
+      }
+      & button{
+      padding: 25px 40px;
+      & span{
+        font-size: 24px;
+      }
+    }
+    }
+  }
+}
+
+.section__two{
+  text-align: center;
+  padding: 50px;
+
+  &--title h3{
+    font-size: 48px;
+    font-weight: 200;
+  }
+
+  &--desc p{
+    margin-top: 30px;
+    font-size: 1.3rem;
+  }
+
+  &--btn{
+    margin-top: 30px;
+    & button{
+      padding: 25px 40px;
+      & span{
+        font-size: 24px;
+      }
+    }
+  }
+
+  &--image{
+    padding: 20px;
+  }
+
+  &--list{
+    display: flex;
+    justify-content: space-between;
+  }
+  &--item{
+    position: relative;
+  }
+  &--name{
+    position: absolute;
+    padding: 10px 20px;
+    border: 1px solid #000;
+    border-radius: 70%;
+    bottom: 70px;
+    right: 10px;
+    & p{
+      margin-top: auto;
+      margin-bottom: auto;
+    }
+  }
+}
+
+.section__three{
+  &--list{
+    display: flex;
+    justify-content: space-between;
+  }
+  &--item{
+    position: relative;
+    & button{
+      padding: 50px 70px;
+      & span{
+        font-size: 24px;
+      }
+    }
+  }
+  &--content{
+    position: absolute;
+    bottom: 30px;
+    left: 50%; 
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+  }
+  &--icon{
+    font-size: 32px;
+  }
+  
+}
+
+.section__four{
+  &--blog{
+    display: flex;
+  }
+  &--image{
+    width: 50%;
+    & img{
+      width: 100%;
+      height: auto;
+      
+    }
+  }
+  &--content{
+    padding: 50px;
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+  &--title p{
+    font-size: 32px;
+    font-weight: 100;
+  }
+  &--desc{
+    font-weight: 200;
+    margin: 40px 0 40px 0;
+
+  }
+}

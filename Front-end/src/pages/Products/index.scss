@@ -1,0 +1,56 @@
+a{
+    text-decoration: none;
+    list-style: none;
+    color: #000;
+
+}
+.products-container {
+  padding: 50px;
+
+  .top-content {
+    text-align: center;
+    margin-bottom: 40px;
+
+    h2 {
+      font-size: 32px;
+      margin-bottom: 16px;
+    }
+
+    p {
+      font-size: 18px;
+      font-weight: 300;
+    }
+  }
+
+  .ant-card {
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-6px);
+
+    }
+
+    .ant-card-body {
+      text-align: center;
+      padding: 16px;
+    }
+  }
+}
+.product{
+  transition: all 0.5s;
+
+  &--overplay{
+    position: relative;;
+  }
+  &--icon{
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    display: none;
+  }
+  &--card:hover .product--icon{
+    display: block;
+  }
+}

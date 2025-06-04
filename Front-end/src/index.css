@@ -1,0 +1,32 @@
+/* src/index.css */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #root {
+  font-family: 'Fraunces', serif !important;
+  font-optical-sizing: auto;
+  font-weight: 500; /* Hoặc weight mặc định bạn muốn */
+  font-style: normal;
+}
+
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6, 
+p,
+a,
+button, .btn, 
+input, .form-control, 
+select, .form-select, 
+textarea, .form-control,
+label,
+.card-title, .card-text, 
+.modal-title, .modal-body, 
+th, td, 
+li 
+ {
+  font-family: 'Fraunces', serif !important;
+
+}
+

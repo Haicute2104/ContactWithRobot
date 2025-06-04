@@ -1,0 +1,42 @@
+a{
+    text-decoration: none;
+    list-style: none;
+
+}
+ul li{
+    list-style: none;
+}
+.header{
+    padding: 30px 0 30px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .1);
+    z-index: 10;
+    background: #ffffff;
+    &__section{
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+       
+    }
+
+    &__menu ul{
+        display: flex;
+        li a{
+            margin-left: 25px;
+            text-decoration: none;
+            color: #000;
+            
+        }
+        li{
+            :hover{
+                color: #626842;
+            }
+        }
+    }
+    &__icon a{
+        margin-left: 20px;
+        margin-right: 10px;
+        color: #000;
+        text-decoration: none;
+        list-style: none;
+    }
+}

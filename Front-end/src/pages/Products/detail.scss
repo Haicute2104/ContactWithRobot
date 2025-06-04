@@ -1,0 +1,21 @@
+.detail{
+  padding: 50px;
+  &__block{
+    display: flex;
+  }
+  &__block{
+      &--img{
+        width: 50%;
+      }
+      &--content{
+        padding: 30px;
+        width: 50%;
+      }
+      &--sensation{
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
+  }
+  
+ 
+}

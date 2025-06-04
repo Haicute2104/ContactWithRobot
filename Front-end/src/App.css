@@ -1,0 +1,28 @@
+.menu-link {
+  color: #333;
+  text-decoration: none;
+  padding: 10px 15px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: blue;
+  }
+
+  &.active { 
+    color: #e892bd; 
+    font-weight: bold;
+    border-bottom: 2px solid black; 
+  }
+}
+
+
+.mobile-menu-link {
+  color: #333;
+  padding: 15px 20px;
+  border-bottom: 1px solid #eee;
+
+  &.active { 
+    color: green; 
+    background-color: #f0f0f0;
+  }
+}
