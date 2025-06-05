@@ -2,6 +2,8 @@ import LayoutDefaultAdmin from "../layouts/admin";
 import LayoutDefault from "../layouts/LayoutDefault";
 import Dashboard from "../pages/Admin/Dashboard";
 import ProductAdmin from "../pages/Admin/Product";
+import CreateProductAdmin from "../pages/Admin/Product/create";
+import ProductDetailAdmin from "../pages/Admin/Product/detail";
 import Cart from "../pages/Cart";
 import Home from "../pages/Home";
 import Instruct from "../pages/Instruct";
@@ -14,19 +16,19 @@ import Question from "../pages/Question";
 export const routes = [
     {
         path: '/',
-        element: <LayoutDefault/>,
+        element: <LayoutDefault />,
         children: [
             {
                 path: '/',
-                element: <Home/>
+                element: <Home />
             },
             {
                 path: '/introduce',
-                element: <Introduce/>
+                element: <Introduce />
             },
             {
                 path: '/product',
-                element: <Products/>,
+                element: <Products />,
                 // children: [
                 //     {
                 //         path: ":id",
@@ -36,38 +38,51 @@ export const routes = [
             },
             {
                 path: '/question',
-                element: <Question/>
+                element: <Question />
             },
             {
                 path: '/news',
-                element: <News/>
+                element: <News />
             },
             {
                 path: '/cart',
-                element: <Cart/>
+                element: <Cart />
             },
             {
                 path: '/instruct',
-                element: <Instruct/>
+                element: <Instruct />
             },
             {
                 path: '/detail',
-                element: <ProductDetail/>
+                element: <ProductDetail />
             },
 
         ]
     },
     {
         path: '/admin',
-        element: <LayoutDefaultAdmin/>,
+        element: <LayoutDefaultAdmin />,
         children: [
             {
-                path: "dashboard",
-                element: <Dashboard/>
+                path: 'dashboard',
+                element: <Dashboard />
             },
             {
-                path: "product",
-                element: <ProductAdmin/>
+                path: 'product',
+                children: [
+                    {
+                        index: true,
+                        element: <ProductAdmin/>
+                    },
+                    {
+                        path: 'create',
+                        element: <CreateProductAdmin/>
+                    },
+                    {
+                        path: ':id',
+                        element: <ProductDetailAdmin/>
+                    }
+                ]
             }
         ]
     }

@@ -1,13 +1,18 @@
-// import { del, get, post } from "../utils/request";
+import { get, patch } from "../utils/request";
 
-// export const getProductList = async () => {
-//   const result = await get("products");
-//   return result;
-// };
-// export const getDetailProductList = async (id) => {
-//   const result = await get(`products/${id}`);
-//   return result;
-// };
+export const getProductList = async () => {
+  const result = await get("product");
+  return result;
+};
+
+export const changeStatus = async(status, id) => {
+  const result = await patch(`product/change-status/${status}/${id}`);
+  return result
+}
+export const getDetailProductList = async (id) => {
+  const result = await get(`product/${id}`);
+  return result;
+};
 
 // export const createProduct = async (options) => {
 //   const result = await post("products", options);
