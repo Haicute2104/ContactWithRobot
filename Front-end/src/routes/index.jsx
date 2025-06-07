@@ -4,6 +4,7 @@ import Dashboard from "../pages/Admin/Dashboard";
 import ProductAdmin from "../pages/Admin/Product";
 import CreateProductAdmin from "../pages/Admin/Product/create";
 import ProductDetailAdmin from "../pages/Admin/Product/detail";
+import EditProductAdmin from "../pages/Admin/Product/update";
 import Cart from "../pages/Cart";
 import Home from "../pages/Home";
 import Instruct from "../pages/Instruct";
@@ -81,6 +82,10 @@ export const routes = [
                     {
                         path: ':id',
                         element: <ProductDetailAdmin/>
+                    },
+                    {
+                        path: 'edit/:id',
+                        element: <EditProductAdmin/>
                     }
                 ]
             }

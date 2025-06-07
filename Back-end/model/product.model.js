@@ -14,9 +14,9 @@ const productSchema = new mongoose.Schema({
   price: { type: Number },
   image: [{ type: String }],
   accessories: {
-    nến: { type: Number },
-    dao_cắt: { type: Number },
-    bộ_dĩa: { type: Number }
+    nen: { type: Number },
+    dao: { type: Number },
+    dia: { type: Number }
   },
   sensation: String,
   status: String,

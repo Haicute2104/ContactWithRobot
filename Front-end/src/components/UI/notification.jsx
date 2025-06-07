@@ -4,6 +4,6 @@ export const notificationSuccess = (api, desc) => {
     description:
       `${desc}`,
     showProgress: true,
-    placement: 'top',
+    placement: 'topRight',
   });
 }

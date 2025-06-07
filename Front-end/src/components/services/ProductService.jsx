@@ -1,4 +1,4 @@
-import { get, patch } from "../utils/request";
+import { del, get, patch, post } from "../utils/request";
 
 export const getProductList = async () => {
   const result = await get("product");
@@ -14,15 +14,20 @@ export const getDetailProductList = async (id) => {
   return result;
 };
 
-// export const createProduct = async (options) => {
-//   const result = await post("products", options);
-//   return result;
-// };
+export const createProduct = async (options) => {
+  try {
+    const result = await post("product/create", options);
+    return result;
+  } catch (error) {
+    console.error('Error creating product:', error);
+    throw error;
+  }
+};
 
-// export const deleteProduct = async (id) => {
-//   const result = await del(`products/${id}`);
-//   return result;
-// };
+export const deleteProduct = async (id) => {
+  const result = await del(`product/delete/${id}`);
+  return result;
+};
 
 // // export const editProduct = async (id, options) => {
 // //   const result = await patch(`products/${id}`, options);

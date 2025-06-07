@@ -1,7 +1,7 @@
 import { use, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getDetailProductList } from "../../../components/services/ProductService";
-import { Button, Card, Form, Image, InputNumber, Tag } from "antd";
+import { Button, Card, Form, Image, InputNumber, Space, Tag } from "antd";
 import './detail.scss'
 
 function ProductDetailAdmin() {
@@ -20,21 +20,21 @@ function ProductDetailAdmin() {
     fetchApi();
   }, [id])
 
-  // console.log(productDetail)
+  // console.log(productDetail.accessories)
 
-    const handleBack = () => {
-      navigate(-1)
-    }
+  const handleBack = () => {
+    navigate(-1)
+  }
   return (
     <>
       <Button onClick={handleBack} color="default">Trở về</Button>
       <h1>Trang chi tiết sản phẩm</h1>
       <div className="detail">
         <div className="detail__block">
-          <div className="detail__block--img">
+          <div className="detail__block--img" data-aos="fade-up">
             {productDetail.image && productDetail.image.length > 0 ? (
               <>
-                <div className="detail__block--main">
+                <div className="detail__block--main" >
                   <Image.PreviewGroup items={productDetail.image}>
                     <Image
                       width={400}
@@ -44,10 +44,10 @@ function ProductDetailAdmin() {
                 </div>
                 <div className="detail__block--sp">
                   {productDetail.image[1] && (
-                    <Image width={200} src={productDetail.image[1]}  />
+                    <Image width={200} src={productDetail.image[1]} />
                   )}
                   {productDetail.image[2] && (
-                    <Image width={200} src={productDetail.image[2]}  />
+                    <Image width={200} src={productDetail.image[2]} />
                   )}
                 </div>
               </>
@@ -94,16 +94,43 @@ function ProductDetailAdmin() {
             </div>
             <div className="detail__block--accessorie">
               <Card title="Dụng cụ đi kèm">
-                
+                <p>Nến: {productDetail.accessories?.nen}</p>
+                <p>Dao: {productDetail.accessories?.dao}</p>
+                <p>Dĩa: {productDetail.accessories?.dia}</p>
               </Card>
             </div>
-
-
-            <div className="detail__block--desc" >
-              <p>{productDetail.description}</p>
+            <div className="detail__block--size">
+              <p>Kích thước bánh: {productDetail.size_cm} cm</p>
             </div>
+            <div className="detail__block--status">
+              <p>Trạng thái: 
+                {(productDetail.status === "active") ? (
+                  <>
+                    <Tag color="green">Hoạt động</Tag>
+                  </>
+                ) : (
+                  <>
+                    <Tag color="red">Hoạt động</Tag>
+                  </>
+                )}
+              </p>
+            </div>
+            <div>
+              <Space>
+                <Button style={{ background: "#B89706", color: "#ffffff" }}>Sửa</Button>
+                <Button type="primary" danger>Xóa</Button>
+              </Space>
+            </div>
+            
           </div>
         </div>
+      </div>
+      <div className="detail__block--desc" >
+        <p>
+          Mô tả bánh: 
+          <span dangerouslySetInnerHTML={{ __html: productDetail.description }}>
+          </span>
+        </p>      
       </div>
     </>
   )

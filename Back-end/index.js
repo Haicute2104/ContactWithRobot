@@ -5,8 +5,9 @@ const routeAdmin = require('./routes/admin/index.routes')
 const methodOverride = require('method-override')
 const systemConfig = require('./config/system');
 const cors = require('cors');
-
-
+const multer  = require('multer');
+const storageMulter = require('./helper/stogareMulter')
+const upload = multer({storage: storageMulter()});
 
 require('dotenv').config();
 
@@ -30,6 +31,8 @@ app.set("views", "./views");
 app.set("view engine", "pug");
 app.use(express.static('public'));
 app.use(methodOverride('_method'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 //App Local
 app.locals.prefixAdmin = systemConfig.prefixAdmin;

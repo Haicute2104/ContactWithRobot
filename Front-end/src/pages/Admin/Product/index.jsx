@@ -1,35 +1,74 @@
 import { useEffect, useState } from "react";
-import { changeStatus, getDetailProductList, getProductList } from "../../../components/services/ProductService";
-import { Button, Divider, Image, Table, Tag, Space, notification, Card, Form, Select } from 'antd';
+import {
+  changeStatus,
+  deleteProduct,
+  getProductList
+} from "../../../components/services/ProductService";
+import {
+  Button,
+  Divider,
+  Image,
+  Table,
+  Tag,
+  Space,
+  notification,
+  Card,
+  Form,
+  Select,
+  Popconfirm
+} from 'antd';
 import { notificationSuccess } from "../../../components/UI/notification";
-import './product.scss'
+import './product.scss';
 import { Link, useNavigate } from "react-router-dom";
+
 function ProductAdmin() {
   const [products, setProduct] = useState([]);
-
   const [api, contextHolder] = notification.useNotification();
+  const [refresh, setRefresh] = useState(false); // ⬅️ trigger để cập nhật giao diện
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchApi = async () => {
       const result = await getProductList();
-      setProduct(result);
+      setProduct(result.reverse());
+    };
+
+    const successNotification = sessionStorage.getItem("productCreateSuccess");
+    if (successNotification) {
+      setRefresh(prev => !prev); 
+      notificationSuccess(api, successNotification);
+      sessionStorage.removeItem('productCreateSuccess');
     }
-    fetchApi()
-  }, []);
 
-  // console.log(products)
-
-  const navigate = useNavigate();
+    fetchApi();
+  }, [refresh]); // ⬅️ chạy lại khi refresh thay đổi
 
   const columns = [
     {
       title: 'STT',
-      dataIndex: 'name',
-      render: text => <a>{text}</a>,
+      render: (text, record, index) => <span>{index + 1}</span>,
     },
     {
       title: 'Hình ảnh',
       dataIndex: 'image',
-      render: text => <img src={text} alt="Product" style={{ width: 50, height: 50 }} />,
+      render: text => {
+        if (Array.isArray(text) && text.length > 0) {
+          return (
+            <Image
+              src={text[0]}
+              alt="Product Image"
+              style={{ width: 100, height: 100, objectFit: 'cover' }}
+            />
+          );
+        }
+        return (
+          <img
+            src="placeholder-image-url.jpg"
+            alt="No Image"
+            style={{ width: 100, height: 100 }}
+          />
+        );
+      }
     },
     {
       title: 'Name',
@@ -43,21 +82,9 @@ function ProductAdmin() {
       title: 'Trạng thái',
       dataIndex: 'status',
       render: (text, record) => (
-        text === "active" ? (
-          <Button type="text" onClick={() => handleChangeStatus(record)}>
-            <Tag color="green">{text}</Tag>
-          </Button>
-        ) : text === "inactive" ? (
-          <Button type="text" onClick={() => handleChangeStatus(record)} >
-
-            <Tag color="red">{text}</Tag>
-          </Button>
-
-        ) : (
-          <Button type="text" onClick={() => handleChangeStatus(record)} >
-            <Tag>{text}</Tag>
-          </Button>
-        )
+        <Button type="text" onClick={() => handleChangeStatus(record)}>
+          <Tag color={text === "active" ? "green" : "red"}>{text}</Tag>
+        </Button>
       ),
     },
     {
@@ -66,8 +93,19 @@ function ProductAdmin() {
       render: (text, record) => (
         <Space>
           <Button type="primary" onClick={() => handleDetail(record)}>Chi tiết</Button>
-          <Button style={{ background: "#B89706", color: "#ffffff" }}>Sửa</Button>
-          <Button type="primary" danger>Xóa</Button>
+          <Button 
+            style={{ background: "#B89706", color: "#ffffff" }}
+            onClick={() => handleEdit(record)}
+            >Sửa</Button>
+          <Popconfirm
+            title="Bạn muốn xóa bản ghi này???"
+            onConfirm={() => handleDelete(record)}
+            onCancel={cancel}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button type="primary" danger>Xóa</Button>
+          </Popconfirm>
         </Space>
       )
     }
@@ -84,23 +122,32 @@ function ProductAdmin() {
   const handleChangeStatus = async (product) => {
     const id = product._id;
     const newStatus = product.status === "active" ? "inactive" : "active";
-    console.log(newStatus);
-    console.log(id);
     const result = await changeStatus(newStatus, id);
-    console.log(result)
     if (result.success) {
       notificationSuccess(api, result.message);
-      setProduct(prevProducts =>
-        prevProducts.map(p =>
-          p._id === id ? { ...p, status: newStatus } : p
-        )
-      );
+      setRefresh(prev => !prev); 
     }
   }
 
-  const handleDetail = async (product) => {
-    navigate(`/admin/product/${product._id}`)
+  const handleDetail = (product) => {
+    navigate(`/admin/product/${product._id}`);
+  }
 
+  const handleDelete = async (values) => {
+    const id = values._id;
+    const result = await deleteProduct(id);
+    if (result.success) {
+      notificationSuccess(api, result.message);
+      setRefresh(prev => !prev); 
+    }
+  }
+
+  const cancel = () => {
+    // Không cần xử lý gì nếu hủy xác nhận
+  }
+
+  const handleEdit = (values) => {
+    navigate(`/admin/product/edit/${values._id}`);
   }
 
   return (
@@ -136,14 +183,14 @@ function ProductAdmin() {
             ]}
           />
         </div>
-
       </Card>
       <Divider />
       <Table
         rowSelection={{ type: selectionType, ...rowSelection }}
         columns={columns}
         dataSource={products}
-        rowKey="_id" // đảm bảo nếu dữ liệu có id, dùng id làm khóa
+        rowKey="_id"
+        pagination={{ pageSize: 5 }}
       />
     </>
   );
