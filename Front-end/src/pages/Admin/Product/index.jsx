@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import {
+  changeMultiAction,
   changeStatus,
   deleteProduct,
   getProductList
@@ -25,6 +26,8 @@ function ProductAdmin() {
   const [products, setProduct] = useState([]);
   const [api, contextHolder] = notification.useNotification();
   const [refresh, setRefresh] = useState(false); // ⬅️ trigger để cập nhật giao diện
+  //Lưu các id sau khi onchange của check box
+  const [selectedRowProduct, setSelectRowProduct] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,15 +36,18 @@ function ProductAdmin() {
       setProduct(result.reverse());
     };
 
-    const successNotification = sessionStorage.getItem("productCreateSuccess");
-    if (successNotification) {
-      setRefresh(prev => !prev); 
-      notificationSuccess(api, successNotification);
+    const createMsg = sessionStorage.getItem("productCreateSuccess");
+    const deleteMsg = sessionStorage.getItem("productDeleteSuccess");
+
+    if (createMsg || deleteMsg) {
+      setRefresh(prev => !prev);
+      notificationSuccess(api, createMsg || deleteMsg);
       sessionStorage.removeItem('productCreateSuccess');
+      sessionStorage.removeItem('productDeleteSuccess');
     }
 
     fetchApi();
-  }, [refresh]); // ⬅️ chạy lại khi refresh thay đổi
+  }, [refresh]); // chạy lại khi refresh thay đổi
 
   const columns = [
     {
@@ -93,10 +99,10 @@ function ProductAdmin() {
       render: (text, record) => (
         <Space>
           <Button type="primary" onClick={() => handleDetail(record)}>Chi tiết</Button>
-          <Button 
+          <Button
             style={{ background: "#B89706", color: "#ffffff" }}
             onClick={() => handleEdit(record)}
-            >Sửa</Button>
+          >Sửa</Button>
           <Popconfirm
             title="Bạn muốn xóa bản ghi này???"
             onConfirm={() => handleDelete(record)}
@@ -112,10 +118,14 @@ function ProductAdmin() {
   ];
 
   const rowSelection = {
+    selectedRowKeys: selectedRowProduct,
     onChange: (selectedRowKeys, selectedRows) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      //set các giá trị id
+      setSelectRowProduct(selectedRowKeys);
+      // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
     },
   };
+  // console.log(selectedRowProduct)
 
   const selectionType = 'checkbox';
 
@@ -125,7 +135,7 @@ function ProductAdmin() {
     const result = await changeStatus(newStatus, id);
     if (result.success) {
       notificationSuccess(api, result.message);
-      setRefresh(prev => !prev); 
+      setRefresh(prev => !prev);
     }
   }
 
@@ -138,7 +148,7 @@ function ProductAdmin() {
     const result = await deleteProduct(id);
     if (result.success) {
       notificationSuccess(api, result.message);
-      setRefresh(prev => !prev); 
+      setRefresh(prev => !prev);
     }
   }
 
@@ -150,6 +160,28 @@ function ProductAdmin() {
     navigate(`/admin/product/edit/${values._id}`);
   }
 
+  const handleAction = async (values) => {
+    // console.log(selectedRowProduct);
+    // console.log(values);
+    const data = {
+      ids: selectedRowProduct,
+      action: values.action
+    }
+
+    // console.log(data);
+
+    const result = await changeMultiAction(data);
+    if (result.success) {
+      notificationSuccess(api, result.message);
+      setRefresh(prev => !prev);
+      setSelectRowProduct([]);
+    }
+  }
+
+  const handleChangeArrange =async (value) => {
+    console.log(value)
+  }
+
   return (
     <>
       <h1>Quản lý sản phẩm</h1>
@@ -159,28 +191,37 @@ function ProductAdmin() {
           <Link to='create'>
             <Button type="primary">+ Thêm mới</Button>
           </Link>
-          <Form>
-            <Select
-              defaultValue="--Chọn hành động"
-              style={{ width: 160 }}
-              options={[
-                { value: "", label: "--Chọn hành động", disabled: true },
-                { value: "active", label: "Hoạt động" },
-                { value: "inactive", label: "Dừng hoạt động" },
-                { value: "delete-all", label: "Xóa tất cả" },
-              ]}
-            />
-            <Button type="submit">Áp dụng</Button>
+          <Form onFinish={handleAction}>
+            <Form.Item
+              name="action"
+              initialValue=""
+              rules={[{ required: true, message: 'Vui lòng chọn hành động!' }]}
+            >
+              <Select
+                style={{ width: 160 }}
+                options={[
+                  { value: "", label: "--Chọn hành động", disabled: true },
+                  { value: "active", label: "Hoạt động" },
+                  { value: "inactive", label: "Dừng hoạt động" },
+                  { value: "delete-all", label: "Xóa tất cả" },
+                ]}
+              />
+            </Form.Item>
+
+            <Button type="primary" htmlType="submit">Áp dụng</Button>
           </Form>
+
           <Select
-            defaultValue="lucy"
-            style={{ width: 120 }}
+            style={{ width: 160 }}
+            onChange={handleChangeArrange}
+            allowClear
             options={[
-              { value: 'jack', label: 'Jack' },
-              { value: 'lucy', label: 'Lucy' },
-              { value: 'Yiminghe', label: 'yiminghe' },
-              { value: 'disabled', label: 'Disabled', disabled: true },
+              { value: 'price-desc', label: 'Giá từ lớn đến bé' },
+              { value: 'price-asc', label: 'Giá từ bé đến lớn' },
+              { value: 'title-asc', label: 'Tiêu đề A - Z' },
+              { value: 'title-desc', label: 'Tiêu đề Z - A' },
             ]}
+            placeholder="Chọn đi"
           />
         </div>
       </Card>

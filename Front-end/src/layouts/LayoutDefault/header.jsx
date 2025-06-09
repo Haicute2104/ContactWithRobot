@@ -1,60 +1,51 @@
-import { useState } from "react"
-import { Link, NavLink } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { Link, NavLink, useNavigate } from "react-router-dom"
 import { AiOutlineMenu, AiOutlineShoppingCart } from "react-icons/ai"
 import { RxCross2 } from "react-icons/rx"
 import './header.scss'
 import { Badge } from "antd"
+import SearchInput from "../../components/UI/search"
+import CartBadge from "../../components/UI/CartBadge"
 
 function Header() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const menuItems = [
     { name: "SẢN PHẨM", href: "product" },
     { name: "CÁCH MUA", href: "instruct" },
     { name: "VỀ QBBy", href: "introduce" },
-    { name: "HỎI ĐÁP", href: "question" },
-    { name: "TIN MỚI", href: "news" },
-  ]
+  ];
 
   return (
     <>
       <nav className="header">
         <div className="header-container">
-          {/* Nút menu mobile */}
+          {/* Mobile menu toggle */}
           <button className="menu-toggle" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
             {mobileMenuOpen ? <RxCross2 size={24} /> : <AiOutlineMenu size={24} />}
           </button>
 
-          {/* Menu trái (desktop) */}
+          {/* Menu trái */}
           <div className="menu-left">
-            {menuItems.slice(0, 3).map((item) => (
-              <NavLink key={item.name} to={item.href} className="menu-link" end> {/* THÊM 'end' Ở ĐÂY */}
+            {menuItems.map((item) => (
+              <NavLink key={item.name} to={item.href} className="menu-link" end>
                 {item.name}
               </NavLink>
             ))}
           </div>
 
           {/* Logo */}
-          <NavLink to="/" className="header-logo" end> {/* VÀ Ở ĐÂY, ĐẶC BIỆT VỚI "/" */}
+          <NavLink to="/" className="header-logo" end>
             <h1>QBBy</h1>
           </NavLink>
 
-          {/* Menu phải (desktop) */}
+          {/* Menu phải */}
           <div className="menu-right">
-            {menuItems.slice(3).map((item) => (
-              <NavLink key={item.name} to={item.href} className="menu-link" end> {/* THÊM 'end' Ở ĐÂY */}
-                {item.name}
-              </NavLink>
-            ))}
-            <Badge count={2}>
-              <Link to="/cart" className="cart-icon">
-                <AiOutlineShoppingCart size={24} /> Giỏ hàng
-              </Link>
-            </Badge>
-           
+            <SearchInput />
+            <CartBadge/>
           </div>
 
-          {/* Icon giỏ hàng mobile */}
+          {/* Giỏ hàng mobile */}
           <div className="mobile-cart">
             <Link to="/cart">
               <AiOutlineShoppingCart size={20} />
@@ -62,25 +53,20 @@ function Header() {
           </div>
         </div>
 
-        {/* Menu mobile */}
+        {/* Mobile menu */}
         <div className={`mobile-menu ${mobileMenuOpen ? "open" : ""}`}>
           <div className="mobile-menu-list">
             {menuItems.map((item) => (
-              <NavLink
-                key={item.name}
-                to={item.href}
-                className="mobile-menu-link"
-                onClick={() => setMobileMenuOpen(false)}
-                end // THÊM 'end' Ở ĐÂY
-              >
+              <NavLink key={item.name} to={item.href} className="mobile-menu-link" onClick={() => setMobileMenuOpen(false)} end>
                 {item.name}
               </NavLink>
             ))}
+            <SearchInput />
           </div>
         </div>
       </nav>
     </>
-  )
+  );
 }
 
-export default Header
+export default Header;

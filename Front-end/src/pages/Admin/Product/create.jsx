@@ -18,7 +18,7 @@ function CreateProductAdmin() {
         ...values,
         image: imageUrls, // Giờ đã có thể truy cập imageUrls từ state
       };
-      console.log('Received values of form: ', fullData); // Log fullData để kiểm tra
+      // console.log('Received values of form: ', fullData); // Log fullData để kiểm tra
       const result = await createProduct(fullData); // Gửi fullData đi
       if(result.success){
         navigate(-1);
@@ -39,10 +39,14 @@ function CreateProductAdmin() {
       .filter(Boolean); // Lọc bỏ các giá trị null/undefined
     setImageUrls(urls);
   };
+  const handleBack = () => {
+    navigate(-1)
+  }
 
   return (
     <>
-      <h2>Thêm mới sản phẩm</h2>
+      <Button onClick={handleBack}>Trở về</Button>
+      <h1>Thêm mới sản phẩm</h1>
       <Form
         form={form} // Gắn form instance vào Form component
         name="add_product_form"

@@ -15,6 +15,10 @@ router.post('/create', upload.array('image'), controller.create );
 
 router.delete('/delete/:id', controller.delete);
 
-router.get('/edit/:id', controller.edit)
+router.get('/edit/:id', controller.edit);
+
+router.patch('/update/:id', controller.update);
+
+router.post('/change-multi', controller.changeMulti);
 
 module.exports = router;

@@ -29,6 +29,16 @@ export const deleteProduct = async (id) => {
   return result;
 };
 
+export const updateProduct = async (id, options) => {
+  const result = await patch(`product/update/${id}`, options);
+  return result;
+}
+
+export const changeMultiAction = async (options) => {
+  const result = await post('product/change-multi', options);
+  return result;
+}
+
 // // export const editProduct = async (id, options) => {
 // //   const result = await patch(`products/${id}`, options);
 // //   return result;

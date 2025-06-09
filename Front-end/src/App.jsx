@@ -7,7 +7,7 @@ function App() {
   useEffect(() => {
     AOS.init({
         duration: 1000,
-        once: false, // quan trọng: cho phép lặp lại animation
+        once: true, // quan trọng: cho phép lặp lại animation
     });
     }, []);
   return (

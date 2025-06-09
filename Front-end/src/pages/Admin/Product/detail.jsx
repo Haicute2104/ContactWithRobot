@@ -1,7 +1,7 @@
 import { use, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { getDetailProductList } from "../../../components/services/ProductService";
-import { Button, Card, Form, Image, InputNumber, Space, Tag } from "antd";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { deleteProduct, getDetailProductList } from "../../../components/services/ProductService";
+import { Button, Card, Form, Image, InputNumber, Popconfirm, Space, Tag } from "antd";
 import './detail.scss'
 
 function ProductDetailAdmin() {
@@ -21,6 +21,20 @@ function ProductDetailAdmin() {
   }, [id])
 
   // console.log(productDetail.accessories)
+  const handleDelete = async () => {
+    console.log("xóa cái này");
+    const result = await deleteProduct(id);
+    if(result.success){
+      sessionStorage.setItem("productDeleteSuccess", result.message);
+      navigate(-1);
+    }
+
+  }
+
+  const cancel = () => {
+
+  }
+
 
   const handleBack = () => {
     navigate(-1)
@@ -106,19 +120,29 @@ function ProductDetailAdmin() {
               <p>Trạng thái: 
                 {(productDetail.status === "active") ? (
                   <>
-                    <Tag color="green">Hoạt động</Tag>
+                    <Tag color="green"> Hoạt động</Tag>
                   </>
                 ) : (
                   <>
-                    <Tag color="red">Hoạt động</Tag>
+                    <Tag color="red"> Dừng hoạt động</Tag>
                   </>
                 )}
               </p>
             </div>
             <div>
               <Space>
-                <Button style={{ background: "#B89706", color: "#ffffff" }}>Sửa</Button>
-                <Button type="primary" danger>Xóa</Button>
+                <Link to={`/admin/product/edit/${id}`}>
+                  <Button style={{ background: "#B89706", color: "#ffffff" }}>Sửa</Button>
+                </Link>
+                <Popconfirm
+                  title="Bạn muốn xóa bản ghi này???"
+                  onConfirm={() => handleDelete()}
+                  onCancel={cancel}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <Button type="primary" danger>Xóa</Button>
+                </Popconfirm>
               </Space>
             </div>
             

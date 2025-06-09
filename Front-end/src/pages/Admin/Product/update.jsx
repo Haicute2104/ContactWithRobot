@@ -1,44 +1,82 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { getDetailProductList } from "../../../components/services/ProductService";
-import { Form, Input, InputNumber, Select, Button, Upload, Row, Col, Checkbox, Space, notification } from 'antd'; // Import message cho thông báo
+import { useNavigate, useParams } from "react-router-dom";
+import { getDetailProductList, updateProduct } from "../../../components/services/ProductService";
+import { Form, Input, InputNumber, Select, Button, Upload, Row, Col, Checkbox, Space, notification } from 'antd';
 import { MinusCircleOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import MyEditor from '../../../components/UI/tinyMce';
+import { notificationSuccess } from "../../../components/UI/notification";
 
-function EditProductAdmin(){
+const { Option } = Select;
+
+function EditProductAdmin() {
   const params = useParams();
+  const navigate = useNavigate();
   const id = params.id;
   const [form] = Form.useForm();
-  const [productEdit, setProductEdit] = useState([]);
+  const [imgUrls, setImgUrls] = useState([]);
+  const [api, contextHolder] = notification.useNotification();
 
   useEffect(() => {
     const fetchApi = async () => {
-      const result = await getDetailProductList(id);
-      setProductEdit(result);
-      form.setFieldValue(result)
-    }
+      try {
+        const result = await getDetailProductList(id);
+        const formData = {
+          ...result,
+          image: result.image.map((url, index) => ({
+            uid: url + index,
+            name: `image-${index}.png`,
+            status: 'done',
+            url: url,
+            response: { urls: [url] }
+          })),
+          flavors: result.flavors || [],
+          accessories: result.accessories || { dao: 0, dia: 0, nen: 0 }
+        };
+        form.setFieldsValue(formData);
+        setImgUrls(result.image);
+      } catch (error) {
+        notification.error({
+          message: 'Lỗi khi tải sản phẩm!',
+          description: error.message || 'Không thể tải dữ liệu sản phẩm.'
+        });
+      }
+    };
     fetchApi();
-  }, [form, id])
+  }, [form, id]);
 
-  console.log(productEdit)
-
-  const onFinish = async () => {
-    
-  } 
   const handleChange = ({ fileList }) => {
     const urls = fileList
       .filter(file => file.status === 'done')
-      .map(file => file.response?.urls && file.response.urls[0]) // Đảm bảo lấy đúng URL từ response.urls
-      .filter(Boolean); // Lọc bỏ các giá trị null/undefined
-    setImageUrls(urls);
+      .map(file => file.response?.urls && file.response.urls[0])
+      .filter(Boolean);
+    setImgUrls(urls);
   };
 
-  return(
+  const handleBack = () => {
+    navigate(-1);
+  };
+
+  const onFinish = async (values) => {
+    const data = {
+      ...values,
+      image: imgUrls
+    };
+
+    console.log(data);
+    const result = await updateProduct(id, data);
+    if(result.success){
+      notificationSuccess(api, result.message)
+    }
+  };
+
+  return (
     <>
+      <Button onClick={handleBack}>Trở về</Button>
       <h1>Chỉnh sửa sản phẩm</h1>
+      {contextHolder}
       <Form
-        form={form} // Gắn form instance vào Form component
-        name="add_product_form"
+        form={form}
+        name="edit_product_form"
         onFinish={onFinish}
         layout="vertical"
       >
@@ -196,11 +234,12 @@ function EditProductAdmin(){
 
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            Thêm sản phẩm
+            Cập nhật sản phẩm
           </Button>
         </Form.Item>
       </Form>
     </>
-  )
+  );
 }
+
 export default EditProductAdmin;
