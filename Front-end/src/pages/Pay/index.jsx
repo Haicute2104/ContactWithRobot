@@ -73,7 +73,8 @@ function Pay() {
   }
 
   const enterLoading = index => {
-    setLoadings(prevLoadings => {
+    if(selectedMethod){
+      setLoadings(prevLoadings => {
       const newLoadings = [...prevLoadings];
       newLoadings[index] = true;
       return newLoadings;
@@ -92,6 +93,10 @@ function Pay() {
     }, 3000);
       
     }, 3000);
+    }
+    else{
+      notificationSuccess(api, "Vui lòng chọn phương thức thanh toán")
+    }
   };
 
   return (

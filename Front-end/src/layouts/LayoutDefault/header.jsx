@@ -27,22 +27,23 @@ function Header() {
 
           {/* Menu trái */}
           <div className="menu-left">
+            <NavLink to="/">
+              <h1>QBBy</h1>
+            </NavLink>
+            <SearchInput />
+          </div>
+
+          {/* Logo */}
+
+
+          {/* Menu phải */}
+          <div className="menu-right">
             {menuItems.map((item) => (
               <NavLink key={item.name} to={item.href} className="menu-link" end>
                 {item.name}
               </NavLink>
             ))}
-          </div>
-
-          {/* Logo */}
-          <NavLink to="/" className="header-logo" end>
-            <h1>QBBy</h1>
-          </NavLink>
-
-          {/* Menu phải */}
-          <div className="menu-right">
-            <SearchInput />
-            <CartBadge/>
+            <CartBadge />
           </div>
 
           {/* Giỏ hàng mobile */}

@@ -1,4 +1,4 @@
-import { Form, Input, InputNumber, Select, Button, Upload, Row, Col, Checkbox, Space, notification } from 'antd'; // Import message cho thông báo
+import { Form, Input, InputNumber, Select, Button, Upload, Row, Col, Checkbox, Space, notification, Radio } from 'antd'; // Import message cho thông báo
 import { MinusCircleOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import MyEditor from '../../../components/UI/tinyMce';
 import { createProduct } from '../../../components/services/ProductService';
@@ -204,10 +204,14 @@ function CreateProductAdmin() {
           label="Trạng thái"
           rules={[{ required: true, message: 'Vui lòng chọn trạng thái!' }]}
         >
-          <Select>
+          {/* <Select>
             <Option value="active">Active</Option>
             <Option value="inactive">Inactive</Option>
-          </Select>
+          </Select> */}
+          <Radio.Group>
+            <Radio value="active" defaultChecked={true}>Hoạt động</Radio>
+            <Radio value="inactive">Dừng hoạt động</Radio>
+          </Radio.Group>
         </Form.Item>
 
         <Form.Item name="deleted" valuePropName="checked">

@@ -58,9 +58,32 @@ function Checkout() {
     console.log("Ngày giao:", value?.format("YYYY-MM-DD"));
   };
 
-  const PickerWithType = ({ onChange }) => {
-    return <TimePicker onChange={onChange} placeholder="Chọn thời gian" style={{ width: "50%" }} required />;
-  };
+  const PickerWithType = ({ onChange, disabledHours }) => {
+        return (
+            <TimePicker
+                onChange={onChange}
+                placeholder="Chọn thời gian"
+                style={{ width: "50%" }}
+                format="HH:mm" // Added format for clarity
+                disabledHours={disabledHours} // Passed disabledHours prop
+            />
+        );
+    };
+
+    const disabledHours = () => {
+        const hours = [];
+        for (let i = 0; i < 24; i++) {
+            if (i < 6 || i > 21) {
+                hours.push(i);
+            }
+        }
+        return hours;
+    };
+    const disabledDate = (current) => {
+        return current && current < dayjs().startOf('day');
+    };
+
+
 
   return (
     <>
@@ -143,6 +166,7 @@ function Checkout() {
                 >
                   <DatePicker
                     onChange={handleChangeDate}
+                    disabledDate={disabledDate}
                     placeholder="Chọn ngày giao hàng"
                     style={{ width: "50%" }}
                   />
@@ -155,7 +179,7 @@ function Checkout() {
                   name="time_received"
                   rules={[{ required: true, message: "Vui lòng nhập thời gian" }]}
                 >
-                  <PickerWithType />
+                  <PickerWithType disabledHours={disabledHours} />
                 </Form.Item>
               </Col>
 
