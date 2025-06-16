@@ -35,11 +35,11 @@ function ProductAdmin() {
     const fetchApi = async () => {
 
       const result = await getProductList(sort); // ✅ truyền sort
-       if (sort === 'default') {
-    setProduct([...result].reverse()); // Sắp xếp thủ công nếu cần
-  } else {
-    setProduct(result); // Không cần reverse
-  }
+      if (sort === 'default') {
+        setProduct([...result].reverse());
+      } else {
+        setProduct(result);
+      }
     };
 
     const createMsg = sessionStorage.getItem("productCreateSuccess");
@@ -153,7 +153,7 @@ function ProductAdmin() {
     }
   };
 
-  const cancel = () => {};
+  const cancel = () => { };
 
   const handleEdit = (values) => {
     navigate(`/admin/product/edit/${values._id}`);
@@ -173,7 +173,7 @@ function ProductAdmin() {
   };
 
   const handleChangeArrange = (value) => {
-    setSort(value); 
+    setSort(value);
     console.log(products);
   };
 
@@ -186,14 +186,14 @@ function ProductAdmin() {
           <Link to='create'>
             <Button type="primary">+ Thêm mới</Button>
           </Link>
-          <Form onFinish={handleAction}>
+          <Form onFinish={handleAction} style={{ display:"flex" }}>
             <Form.Item
               name="action"
               initialValue=""
               rules={[{ required: true, message: 'Vui lòng chọn hành động!' }]}
             >
               <Select
-                style={{ width: 160 }}
+                style={{ width: 160, marginRight:20 }}
                 options={[
                   { value: "", label: "--Chọn hành động", disabled: true },
                   { value: "active", label: "Hoạt động" },
@@ -211,7 +211,7 @@ function ProductAdmin() {
             allowClear
             defaultValue="default"
             options={[
-              { value: 'default', label: 'Mặc định'},
+              { value: 'default', label: 'Mặc định' },
               { value: 'price-desc', label: 'Giá từ lớn đến bé' },
               { value: 'price-asc', label: 'Giá từ bé đến lớn' },
               { value: 'title-asc', label: 'Tiêu đề A - Z' },
