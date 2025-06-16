@@ -1,7 +1,11 @@
 import { del, get, patch, post } from "../utils/request";
 
-export const getProductList = async () => {
-  const result = await get("product");
+export const getProductList = async (sortType = "") => {
+  const result = await get("product", {
+     params: {
+        sort: sortType
+      }
+  });
   return result;
 };
 

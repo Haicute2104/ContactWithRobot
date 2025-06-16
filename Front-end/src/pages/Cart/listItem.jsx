@@ -143,7 +143,8 @@ function ListItem({ items }) {
         rowKey={(record) => record.info._id}
         pagination={false}
         rowSelection={rowSelection}
-
+        data-aos="fade-up"
+        
       />
       <Card title={`Tổng tiền: ${totalPrice.toLocaleString('vi-VN')} đ`}>
         <div style={{ display: "flex", justifyContent: "flex-end" }}>

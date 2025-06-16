@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const { Search } = Input;
 
-function SearchInput({ placeholder = "Nhập từ khóa...", width = 200 }) { // Removed onSearch prop if you want to handle navigation internally
+function SearchInput({ placeholder = "Nhập từ khóa...", width = 300 }) { 
   const navigate = useNavigate(); 
 
   const handleSearch = (value) => {

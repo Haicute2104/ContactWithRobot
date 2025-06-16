@@ -97,7 +97,8 @@ function Products() {
       <div className="product">
         <div className="product__list">
           <Row gutter={[24, 32]} justify="center">
-            {products.map((item, index) => (
+            {products.filter(item => item.status === "active").map((item, index) => (
+              
               <Col key={index} xs={24} sm={12} md={8} lg={6}>
                 <Card
                   onClick={() => handleDetails(item)}

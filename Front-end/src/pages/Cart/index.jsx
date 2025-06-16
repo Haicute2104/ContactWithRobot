@@ -16,7 +16,7 @@ function Cart(){
 
     return(
         <>
-            <h1>Trang giỏ hàng</h1>
+            <h1>Giỏ hàng</h1>
             <div className="container">
                 <Space>
                     <Button onClick={handleBack}>Trở về</Button>

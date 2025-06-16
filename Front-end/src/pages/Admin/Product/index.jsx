@@ -25,15 +25,21 @@ import { Link, useNavigate } from "react-router-dom";
 function ProductAdmin() {
   const [products, setProduct] = useState([]);
   const [api, contextHolder] = notification.useNotification();
-  const [refresh, setRefresh] = useState(false); // ⬅️ trigger để cập nhật giao diện
-  //Lưu các id sau khi onchange của check box
+  const [refresh, setRefresh] = useState(false);
   const [selectedRowProduct, setSelectRowProduct] = useState([]);
+  const [sort, setSort] = useState("");
   const navigate = useNavigate();
+
 
   useEffect(() => {
     const fetchApi = async () => {
-      const result = await getProductList();
-      setProduct(result.reverse());
+
+      const result = await getProductList(sort); // ✅ truyền sort
+       if (sort === 'default') {
+    setProduct([...result].reverse()); // Sắp xếp thủ công nếu cần
+  } else {
+    setProduct(result); // Không cần reverse
+  }
     };
 
     const createMsg = sessionStorage.getItem("productCreateSuccess");
@@ -47,7 +53,7 @@ function ProductAdmin() {
     }
 
     fetchApi();
-  }, [refresh]); // chạy lại khi refresh thay đổi
+  }, [refresh, sort]);
 
   const columns = [
     {
@@ -119,15 +125,10 @@ function ProductAdmin() {
 
   const rowSelection = {
     selectedRowKeys: selectedRowProduct,
-    onChange: (selectedRowKeys, selectedRows) => {
-      //set các giá trị id
+    onChange: (selectedRowKeys) => {
       setSelectRowProduct(selectedRowKeys);
-      // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
     },
   };
-  // console.log(selectedRowProduct)
-
-  const selectionType = 'checkbox';
 
   const handleChangeStatus = async (product) => {
     const id = product._id;
@@ -137,11 +138,11 @@ function ProductAdmin() {
       notificationSuccess(api, result.message);
       setRefresh(prev => !prev);
     }
-  }
+  };
 
   const handleDetail = (product) => {
     navigate(`/admin/product/${product._id}`);
-  }
+  };
 
   const handleDelete = async (values) => {
     const id = values._id;
@@ -150,37 +151,31 @@ function ProductAdmin() {
       notificationSuccess(api, result.message);
       setRefresh(prev => !prev);
     }
-  }
+  };
 
-  const cancel = () => {
-    // Không cần xử lý gì nếu hủy xác nhận
-  }
+  const cancel = () => {};
 
   const handleEdit = (values) => {
     navigate(`/admin/product/edit/${values._id}`);
-  }
+  };
 
   const handleAction = async (values) => {
-    // console.log(selectedRowProduct);
-    // console.log(values);
     const data = {
       ids: selectedRowProduct,
       action: values.action
-    }
-
-    // console.log(data);
-
+    };
     const result = await changeMultiAction(data);
     if (result.success) {
       notificationSuccess(api, result.message);
       setRefresh(prev => !prev);
       setSelectRowProduct([]);
     }
-  }
+  };
 
-  const handleChangeArrange =async (value) => {
-    console.log(value)
-  }
+  const handleChangeArrange = (value) => {
+    setSort(value); 
+    console.log(products);
+  };
 
   return (
     <>
@@ -207,7 +202,6 @@ function ProductAdmin() {
                 ]}
               />
             </Form.Item>
-
             <Button type="primary" htmlType="submit">Áp dụng</Button>
           </Form>
 
@@ -215,19 +209,21 @@ function ProductAdmin() {
             style={{ width: 160 }}
             onChange={handleChangeArrange}
             allowClear
+            defaultValue="default"
             options={[
+              { value: 'default', label: 'Mặc định'},
               { value: 'price-desc', label: 'Giá từ lớn đến bé' },
               { value: 'price-asc', label: 'Giá từ bé đến lớn' },
               { value: 'title-asc', label: 'Tiêu đề A - Z' },
               { value: 'title-desc', label: 'Tiêu đề Z - A' },
             ]}
-            placeholder="Chọn đi"
+            placeholder="Chọn sắp xếp"
           />
         </div>
       </Card>
       <Divider />
       <Table
-        rowSelection={{ type: selectionType, ...rowSelection }}
+        rowSelection={{ type: 'checkbox', ...rowSelection }}
         columns={columns}
         dataSource={products}
         rowKey="_id"

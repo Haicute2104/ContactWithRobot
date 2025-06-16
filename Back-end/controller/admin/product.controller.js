@@ -1,9 +1,20 @@
 const Product = require("../../model/product.model");
 module.exports.index = async (req, res) => {
   try {
+    const {sort} = req.query;
+    // console.log(sort);
+    // console.log(req.query);
+
+    let sortQuery = {};
+
+    if (sort === "price-desc") sortQuery = { price: -1 };
+    else if (sort === "price-asc") sortQuery = { price: 1 };
+    else if (sort === "title-asc") sortQuery = { name: 1 };
+    else if (sort === "title-desc") sortQuery = { name: -1 };
+
     const products = await Product.find({
       deleted: false
-    });
+    }).sort(sortQuery || { timestamp: -1 });
 
     res.json(products);
     console.log("Sản phẩm đã được gửi về frontend.");

@@ -1,9 +1,10 @@
-import { Col, DatePicker, Empty, Form, Input, Row, Button, message, TimePicker, notification } from "antd";
+import { Col, DatePicker, Empty, Form, Input, Row, Button, message, TimePicker, notification, Spin } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import MyEditor from "../../components/UI/tinyMce";
 import { notificationSuccess } from "../../components/UI/notification";
 import { checkoutProduct } from "../../components/services/CheckoutService";
+import { useState } from "react";
 
 function Checkout() {
   const location = useLocation();
@@ -11,11 +12,14 @@ function Checkout() {
   const totalPrice = location?.state?.totalPrice || 0;
 
   const [api, contexHolder] = notification.useNotification();
+  const [spinning, setSpinning] = useState(false);
 
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
+    //xoay tròn đợi gửi dữ liệu.
+    setSpinning(true);
     // Destructure các giá trị từ đối tượng `values`
     const { fullName, phone, address, email, note, date_delivery, time_received } = values;
 
@@ -39,6 +43,7 @@ function Checkout() {
     const result = await checkoutProduct(formData);
     // Xử lý kết quả từ backend
     if(result){
+      setSpinning(false)
       navigate('/pay', {
         state: {
           orderId: result.orderId,
@@ -118,6 +123,7 @@ function Checkout() {
                   label="Họ và tên"
                   name="fullName"
                   rules={[{ required: true, message: "Vui lòng nhập họ và tên" }]}
+                  data-aos="fade-up"
                 >
                   <Input />
                 </Form.Item>
@@ -134,6 +140,7 @@ function Checkout() {
                       message: "Số điện thoại không hợp lệ",
                     },
                   ]}
+                  data-aos="fade-up"
                 >
                   <Input type="tel" />
                 </Form.Item>
@@ -143,6 +150,7 @@ function Checkout() {
                   label="Email"
                   name="email"
                   rules={[{ required: true, message: "Vui lòng nhập email" }]}
+                  data-aos="fade-up"
                 >
                   <Input type="email" />
                 </Form.Item>
@@ -153,6 +161,7 @@ function Checkout() {
                   label="Địa chỉ"
                   name="address"
                   rules={[{ required: true, message: "Vui lòng nhập địa chỉ" }]}
+                  data-aos="fade-up"
                 >
                   <Input />
                 </Form.Item>
@@ -163,6 +172,7 @@ function Checkout() {
                   label="Ngày giao hàng"
                   name="date_delivery"
                   rules={[{ required: true, message: "Vui lòng chọn ngày giao" }]}
+                  data-aos="fade-up"
                 >
                   <DatePicker
                     onChange={handleChangeDate}
@@ -178,6 +188,7 @@ function Checkout() {
                   label="Thời gian nhận"
                   name="time_received"
                   rules={[{ required: true, message: "Vui lòng nhập thời gian" }]}
+                  data-aos="fade-up"
                 >
                   <PickerWithType disabledHours={disabledHours} />
                 </Form.Item>
@@ -188,7 +199,7 @@ function Checkout() {
                   label="Ghi chú và lời chúc"
                   name="note"
                   rules={[{ required: true, message: "Vui lòng nhập lời chúc" }]}
-
+                  data-aos="fade-up"
                 >
                   <MyEditor />
                 </Form.Item>
@@ -199,10 +210,13 @@ function Checkout() {
                   <Button type="primary" htmlType="submit">
                     Đặt hàng ({totalPrice.toLocaleString('vi-VN')} đ)
                   </Button>
+
                 </Form.Item>
               </Col>
             </Row>
           </Form>
+          <Spin spinning={spinning} tip="Đang xử lý đơn hàng..." fullscreen />
+
         </div>
       ) : (
         <div

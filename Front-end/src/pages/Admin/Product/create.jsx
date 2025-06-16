@@ -82,6 +82,7 @@ function CreateProductAdmin() {
                 <Option value="Bánh Kem">Bánh Kem</Option>
                 <Option value="Bánh sinh nhật">Bánh sinh nhật</Option>
                 <Option value="Bánh Pháp">Bánh Pháp</Option>
+                <Option value="Bánh Ngọt">Bánh ngọt</Option>
               </Select>
             </Form.Item>
           </Col>

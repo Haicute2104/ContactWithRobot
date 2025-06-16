@@ -122,7 +122,7 @@ function Pay() {
       </p>
 
       <div style={{ marginTop: 24 }}>
-        <Radio.Group onChange={handleChange} value={selectedMethod}>
+        <Radio.Group onChange={handleChange} value={selectedMethod} data-aos="fade-up">
           <Space direction="vertical" style={{ width: "100%" }}>
             <Radio value="mbbank" style={{ width: "100%" }}>
               <Space>

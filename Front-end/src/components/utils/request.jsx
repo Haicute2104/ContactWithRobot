@@ -10,13 +10,13 @@ const apiClient = axios.create({
   },
 });
 
-export const get = async (path) => {
+export const get = async (path, options = {}) => {
   try {
-    const response = await apiClient.get(path);
-    return response.data; // Axios tự động parse JSON vào .data
+    const response = await apiClient.get(path, options);
+    return response.data; 
   } catch (error) {
     console.error(`Error in GET ${path}:`, error.response?.data || error.message);
-    throw error; // Ném lại lỗi để component gọi có thể xử lý
+    throw error; 
   }
 };
 
